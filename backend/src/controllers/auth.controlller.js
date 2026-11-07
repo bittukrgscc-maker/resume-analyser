@@ -4,6 +4,13 @@ const mongoose=require("mongoose")
 const jwt= require("jsonwebtoken")
 const bcrypt=require("bcrypt")
 
+const isProduction = process.env.NODE_ENV === "production"
+const authCookieOptions = {
+   httpOnly: true,
+   secure: isProduction,
+   sameSite: isProduction ? "none" : "lax"
+}
+
 // isme register karne ke lye teen chchexzein lagi thi 
 // username, email, pasword
 async function registerUserController(req,res){
@@ -53,7 +60,7 @@ async function registerUserController(req,res){
          )
 
          // ab hume cookie ke saath response bhejna hai
-         res.cookie("token",token)
+         res.cookie("token",token,authCookieOptions)
 
          res.status(201).json({
             messsage:"User registerd successfully",
@@ -108,7 +115,7 @@ async function loginUserController(req,res){
    // ab jab token mi save ho gaya toh ab hum isko 
    // ab hume isko sednd karbna hoga response side par ki user login ho gay ahai
    
-   res.cookie("token",token)
+   res.cookie("token",token,authCookieOptions)
    res.status(201).json({
       message:"login suce4ssfully",
       user:{
@@ -130,7 +137,7 @@ async function logoutUsercobntroller(req,res){
    // humara jo token hota hai voh save hota hai cookies mai
     const token= req.cookies.token
 
-    res.clearCookie("token")
+    res.clearCookie("token",authCookieOptions)
     res.status(200).json({
       message:"User logout SuccessFully"
     })

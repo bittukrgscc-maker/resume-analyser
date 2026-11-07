@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: resume-analyser-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm --prefix backend ci
+    startCommand: npm --prefix backend start
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: GOOGLE_GENAI_API_KEY
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_ORIGIN
+        fromService:
+          name: resume-analyser-web
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+
+  - type: web
+    runtime: static
+    name: resume-analyser-web
+    plan: free
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: resume-analyser-api
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
