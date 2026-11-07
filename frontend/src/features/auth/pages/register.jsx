@@ -15,7 +15,7 @@ const Register = () => {
         setError("")
         const registered = await handleRegister({username,email,password})
         if (registered) navigate("/")
-        else setError("Registration nahi ho paayi. Backend/database check karke dobara try karo.")
+        else setError("Registration failed. Please try again.");
     }
     if(loading){
         return(<main><h1>Loading....</h1></main>)

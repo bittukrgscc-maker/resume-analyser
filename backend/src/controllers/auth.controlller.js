@@ -20,7 +20,7 @@ async function registerUserController(req,res){
         // hume koi invalid request bhej dena hai
         if(!username || !email || !password){
              return res.status(401).json({
-                message:"please provide username,emil,oasword"
+                message:"please provide username,emil,password"
              })
         } // aacha ye check ilsiye lagaay agaya hai taaki agar koi v usr 
         // bina inn teeno ko bhare hue sign in  button ke usspe cl;ick kare toh usko 
